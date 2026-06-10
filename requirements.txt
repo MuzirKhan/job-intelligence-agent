@@ -1,0 +1,9 @@
+streamlit
+langchain
+langchain-core
+langchain-mistralai
+langchain-community
+mistralai
+linkedin-jobs-scraper
+python-dotenv
+rich
