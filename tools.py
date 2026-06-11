@@ -1,3 +1,4 @@
+import streamlit as st
 from langchain.tools import tool
 from linkedin_jobs_scraper import LinkedinScraper
 from linkedin_jobs_scraper.events import Events, EventData
