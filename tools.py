@@ -1,8 +1,6 @@
 import streamlit as st
 from langchain.tools import tool
-from linkedin_jobs_scraper import LinkedinScraper
-from linkedin_jobs_scraper.events import Events, EventData
-from linkedin_jobs_scraper.query import Query, QueryOptions
+
 from langchain_mistralai import ChatMistralAI
 from langchain_core.output_parsers import JsonOutputParser, StrOutputParser
 from langchain_core.prompts import ChatPromptTemplate
@@ -14,34 +12,31 @@ import os
 # ─────────────────────────────────────────────
 @tool
 def scrape_jobs(role: str, location: str) -> str:
-    """Scrapes LinkedIn for job listings based on role and location.
+    """Fetches job listings from Remotive API based on role and location.
     Returns job listings as a JSON string."""
+    import requests
 
+    response = requests.get(
+        "https://remotive.com/api/remote-jobs",
+        params={"search": role, "limit": 5}
+    )
+    
+    raw = response.json().get("jobs", [])
+    
     jobs = []
-
-    def on_data(data: EventData):
+    for job in raw[:2]:
         jobs.append({
-            "title": data.title,
-            "company": data.company,
-            "location": data.location,
-            "description": data.description
+            "title": job.get("title", ""),
+            "company": job.get("company_name", ""),
+            "location": job.get("candidate_required_location", "Remote"),
+            "description": job.get("description", "")
         })
-
-    scraper = LinkedinScraper()
-    scraper.on(Events.DATA, on_data)
-    scraper.on(Events.ERROR, lambda e: print(f"Scraper error: {e}"))
-
-    scraper.run([Query(
-        query=role,
-        options=QueryOptions(locations=[location], limit=2)
-    )])
 
     os.makedirs("data", exist_ok=True)
     with open("data/jobs_raw.json", "w") as f:
         json.dump(jobs, f, indent=4)
 
     return json.dumps(jobs)
-
 
 # ─────────────────────────────────────────────
 # TOOL 2 — Extract Skills from JDs
