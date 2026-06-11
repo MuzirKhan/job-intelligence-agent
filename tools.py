@@ -50,7 +50,8 @@ def extract_skills(jobs_json: str) -> str:
     """Extracts required skills, domain, and experience from job descriptions.
     Takes a JSON string of jobs, returns extracted skills as JSON string."""
 
-    llm = ChatMistralAI(model="mistral-small-2506")
+    llm = ChatMistralAI(model="mistral-small-2506",
+            api_key=st.secrets.get("MISTRAL_API_KEY"))
     parser = JsonOutputParser()
     prompt = ChatPromptTemplate.from_messages([
         ("system", """You are a professional skills extractor from job descriptions.
@@ -90,7 +91,8 @@ def analyze_gap(extracted_jobs_json: str, profile_json: str = "") -> str:
         with open("data/profile.json", "r") as f:
             profile = json.load(f)
 
-    llm = ChatMistralAI(model="mistral-small-2506")
+    llm = ChatMistralAI(model="mistral-small-2506",    
+        api_key=st.secrets.get("MISTRAL_API_KEY"))
     parser = JsonOutputParser()
     prompt = ChatPromptTemplate.from_messages([
         ("system", """You are a professional gap analyzer for data engineers.
@@ -129,7 +131,9 @@ def prep_questions(gap_json: str) -> str:
     with open("data/profile.json", "r") as f:
         profile = json.load(f)
 
-    llm = ChatMistralAI(model="mistral-large-latest")
+    llm = ChatMistralAI(model="mistral-large-latest",
+    api_key=st.secrets.get("MISTRAL_API_KEY")
+)
     parser = JsonOutputParser()
     prompt = ChatPromptTemplate.from_messages([
         ("system", """You are a professional interview preparation coach for data engineers.
@@ -166,7 +170,8 @@ def generate_tmay(gap_json: str) -> str:
     with open("data/profile.json", "r") as f:
         profile = json.load(f)
 
-    llm = ChatMistralAI(model="mistral-large-latest")
+    llm = ChatMistralAI(model="mistral-large-latest",
+    api_key=st.secrets.get("MISTRAL_API_KEY"))
     parser = StrOutputParser()
     prompt = ChatPromptTemplate.from_messages([
         ("system", """You are a professional interview coach.
