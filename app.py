@@ -234,7 +234,8 @@ Currently Learning: {learning_skills}
 Certifications: {certifications}
 Location: {location_home}
 """
-                llm = ChatMistralAI(model="mistral-small-2506")
+                llm = ChatMistralAI(model="mistral-small-2506",
+                    api_key=st.secrets.get("MISTRAL_API_KEY"))
                 prompt = ChatPromptTemplate.from_messages([
                     ("system", """You are a professional profile extractor.
 Extract the information and return ONLY a valid JSON object with these exact keys:
