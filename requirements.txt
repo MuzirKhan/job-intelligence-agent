@@ -4,6 +4,6 @@ langchain-core
 langchain-mistralai
 langchain-community
 mistralai
-linkedin-jobs-scraper
+requests
 python-dotenv
 rich
